@@ -1,4 +1,6 @@
-#pragma once
+#ifndef STOCKER_API_H 
+#define STOCKER_API_H
+
 #include <string>
 #include <curl/curl.h>
 #include <iomanip>
@@ -138,3 +140,5 @@ namespace stocker
         return true;
     }
 }
+
+#endif // STOCKER_API_H

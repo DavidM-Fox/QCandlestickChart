@@ -17,11 +17,13 @@ find_package(Qt5 COMPONENTS Core Gui Widgets Charts REQUIRED)
 find_package(CURL CONFIG REQUIRED)
 
 set(PROJECT_SOURCES
-        main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
-        include/stocker_api.hpp
+        src/main.cpp
+        src/mainwindow.cpp
+        src/QCandlestickChart.cpp
+        inc/mainwindow.h
+        inc/stocker_api.hpp
+        inc/QCandlestickChart.h
+        inc/mainwindow.ui
 )
 
 add_executable(stocker ${PROJECT_SOURCES})
