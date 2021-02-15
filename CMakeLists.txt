@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0.0)
 
-project(stocker LANGUAGES CXX)
+project(qcschart LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -20,12 +20,12 @@ set(PROJECT_SOURCES
         src/main.cpp
         src/mainwindow.cpp
         src/QCandlestickChart.cpp
+        src/avapi.cpp
         inc/mainwindow.h
-        inc/stocker_api.hpp
+        inc/mainwindow_ui.h
         inc/QCandlestickChart.h
-        inc/mainwindow.ui
+        inc/avapi.h
 )
 
-add_executable(stocker ${PROJECT_SOURCES})
-target_link_libraries(stocker PRIVATE CURL::libcurl Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Charts)
-# target_link_libraries(stocker PRIVATE CURL::libcurl)
+add_executable(qcschart ${PROJECT_SOURCES})
+target_link_libraries(qcschart PRIVATE CURL::libcurl Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Charts)
