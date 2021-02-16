@@ -122,6 +122,7 @@ time_series Quote::parseIntradayCsv(const std::string &file_name)
         series.push_back(
             std::make_pair(dateTimeToUnixTimestamp(date_time[i]), data));
     }
+    std::reverse(series.begin(), series.end());
     return series;
 }
 
@@ -161,6 +162,7 @@ time_series Quote::parseTimeSeriesCsv(const std::string &file_name,
 
         series.push_back(std::make_pair(dateToUnixTimestamp(date[i]), data));
     }
+    std::reverse(series.begin(), series.end());
     return series;
 }
 

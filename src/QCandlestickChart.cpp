@@ -1,21 +1,33 @@
 #include "../inc/QCandlestickChart.h"
+#include <QDebug>
 
-QCandlestickChart::QCandlestickChart(QWidget *parent) {}
-
-QCandlestickChart::~QCandlestickChart() {}
-
-void QCandlestickChart::addAvapiSeries(avapi::time_series &avapi_series,
-                                       const QString &title)
+QCandlestickChartView::QCandlestickChartView(QWidget *parent)
+    : QChartView(new QChart(), parent)
 {
+    this->setRenderHint(QPainter::Antialiasing);
+    this->setRubberBand(QChartView::HorizontalRubberBand);
+    this->setMouseTracking(true);
 
-    QCandlestickSeries *series = new QCandlestickSeries();
-    series->setIncreasingColor(QColor(Qt::green));
-    series->setDecreasingColor(QColor(Qt::red));
-    series->setName(title);
+    this->m_series = new QCandlestickSeries();
+    this->m_series->setIncreasingColor(QColor(Qt::green));
+    this->m_series->setDecreasingColor(QColor(Qt::red));
+    chart()->setAnimationOptions(QChart::SeriesAnimations);
+}
 
-    std::reverse(avapi_series.begin(), avapi_series.end());
+QCandlestickChartView::~QCandlestickChartView() {}
 
-    for (auto it = avapi_series.begin(); it != avapi_series.end(); ++it) {
+void QCandlestickChartView::setChartTitle(const QString &title)
+{
+    chart()->setTitle(title);
+}
+
+// Add an avapi::time_series to this chart
+void QCandlestickChartView::addChartSeries(avapi::time_series &series,
+                                           const QString &title)
+{
+    this->m_series->setName(title);
+
+    for (auto it = series.begin(); it != series.end(); ++it) {
 
         const qreal timestamp = it->first;
         const qreal open = it->second[0];
@@ -28,26 +40,62 @@ void QCandlestickChart::addAvapiSeries(avapi::time_series &avapi_series,
         set->setHigh(high);
         set->setLow(low);
         set->setClose(close);
-        series->append(set);
+        this->m_series->append(set);
 
-        this->m_series_xlabel
-            << QDateTime::fromSecsSinceEpoch(timestamp).toString(
-                   "yyyy-MM-dd hh:mm");
+        this->m_categories << QDateTime::fromSecsSinceEpoch(timestamp).toString(
+            "yyyy-MM-dd hh:mm");
     }
-    this->addSeries(series);
+    chart()->addSeries(this->m_series);
 
-    this->createDefaultAxes();
+    chart()->createDefaultAxes();
     QBarCategoryAxis *axisX =
-        qobject_cast<QBarCategoryAxis *>(this->axes(Qt::Horizontal).at(0));
-    axisX->setCategories(this->m_series_xlabel);
+        qobject_cast<QBarCategoryAxis *>(chart()->axes(Qt::Horizontal).at(0));
+    axisX->setCategories(this->m_categories);
     axisX->setLabelsAngle(-90);
+    axisX->hide();
 
     QValueAxis *axisY =
-        qobject_cast<QValueAxis *>(this->axes(Qt::Vertical).at(0));
+        qobject_cast<QValueAxis *>(chart()->axes(Qt::Vertical).at(0));
     axisY->setMax(axisY->max() * 1.01);
     axisY->setMin(axisY->min() * 0.99);
 
-    this->setAcceptHoverEvents(true);
-    this->legend()->setVisible(true);
-    this->legend()->setAlignment(Qt::AlignBottom);
+    // chart()->setAcceptHoverEvents(true);
+    chart()->legend()->setVisible(true);
+    chart()->legend()->setAlignment(Qt::AlignBottom);
+
+    connect(this->m_series, SIGNAL(hovered(bool, QCandlestickSet *)), this,
+            SLOT(sltTooltip(bool, QCandlestickSet *)));
+}
+
+void QCandlestickChartView::sltTooltip(bool status, QCandlestickSet *set)
+{
+    if (this->m_tooltip == nullptr) {
+        this->m_tooltip = new QLabel(this);
+        this->m_tooltip->setStyleSheet(
+            "background: rgba(51,51,51,185);"
+            "color: rgb(255, 255, 255);"
+            "border:0px groove gray;border-radius:10px;padding:2px 4px;"
+            "border:2px groove gray;border-radius:10px;padding:2px 4px;");
+        this->m_tooltip->setVisible(false);
+    }
+    if (status) {
+        QPoint cursor_g = QCursor::pos();
+        QPoint cursor_w = QWidget::mapFromGlobal(QCursor::pos());
+        QString date_time = QDateTime::fromSecsSinceEpoch(set->timestamp())
+                                .toString("yyyy-MM-dd | hh:mm\n");
+        QString open = "Open: " + QString::number(set->open()) + "\n";
+        QString high = "High: " + QString::number(set->high()) + "\n";
+        QString low = "Low: " + QString::number(set->low()) + "\n";
+        QString close = "Close: " + QString::number(set->close());
+        this->m_tooltip->setText(date_time + open + high + low + close);
+        this->m_tooltip->move(cursor_g.x(), cursor_g.y());
+        // this->m_tooltip->move(cursor_w.x(), cursor_w.y());
+        this->m_tooltip->show();
+
+        qDebug() << "global: " << cursor_g.x() << cursor_g.y();
+        qDebug() << "global: " << cursor_w.x() << cursor_w.y();
+    }
+    else {
+        this->m_tooltip->hide();
+    }
 }

@@ -1,12 +1,14 @@
 #ifndef AVAPI_H
 #define AVAPI_H
 #include "rapidcsv.h"
+#include <algorithm>
 #include <curl/curl.h>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <string>
 #include <vector>
+
 
 namespace avapi {
 

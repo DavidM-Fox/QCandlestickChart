@@ -2,6 +2,7 @@
 #include "../inc/QCandlestickChart.h"
 #include "../inc/mainwindow_ui.h"
 #include <QChartView>
+#include <Qdebug>
 
 // MainWindow Constructor for stocker application
 MainWindow::MainWindow(QWidget *parent)
@@ -9,22 +10,17 @@ MainWindow::MainWindow(QWidget *parent)
 {
     // Import ui from QT Designer
     ui->setupUi(this);
+    this->setMouseTracking(true);
     std::string symbol = "GME";
     std::string api_key = avapi::readFirstLineFromFile("../../api.key");
     avapi::Quote quote(symbol, api_key);
     avapi::time_series series = quote.getIntradaySeries("15min");
 
-    QCandlestickChart *chart = new QCandlestickChart();
-    chart->setTitle(QString::fromStdString("GME Intraday"));
-    chart->setAnimationOptions(QChart::SeriesAnimations);
-    chart->addAvapiSeries(series, QString::fromStdString("GME"));
+    QCandlestickChartView *chart_view = new QCandlestickChartView();
+    chart_view->setChartTitle(QString::fromStdString("GME Intraday"));
+    chart_view->addChartSeries(series, QString::fromStdString("GME"));
 
-    QChartView *chart_view = new QChartView(chart);
-    chart_view->setRenderHint(QPainter::Antialiasing);
-    chart_view->setRubberBand(QChartView::HorizontalRubberBand);
-    chart_view->setMouseTracking(true);
-
-    ui->gridLayout->addWidget(chart_view, 0, 0);
+    this->setCentralWidget(chart_view);
 }
 
 // MainWindow Deconstructor

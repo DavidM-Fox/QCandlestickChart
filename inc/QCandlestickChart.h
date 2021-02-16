@@ -1,22 +1,26 @@
 #ifndef QCANDLESTICKCHART_H
 #define QCANDLESTICKCHART_H
 #include "avapi.h"
-#include <QPainter>
 #include <QtCharts>
-#include <QtWidgets>
-#include <algorithm>
 #include <vector>
 
-class QCandlestickChart : public QChart {
+class QCandlestickChartView : public QChartView {
     Q_OBJECT
 
 public:
-    explicit QCandlestickChart(QWidget *parent = 0);
-    ~QCandlestickChart();
+    explicit QCandlestickChartView(QWidget *parent = 0);
+    ~QCandlestickChartView();
 
-    void addAvapiSeries(avapi::time_series &avapi_series, const QString &title);
+    void setChartTitle(const QString &title);
+    void setChartAnimationOptions(enum QChart::AnimationOption option);
+    void addChartSeries(avapi::time_series &series, const QString &title);
+
+private slots:
+    void sltTooltip(bool status, QCandlestickSet *set);
 
 private:
-    QStringList m_series_xlabel;
+    QCandlestickSeries *m_series;
+    QStringList m_categories;
+    QLabel *m_tooltip = nullptr;
 };
 #endif // QCANDLESTICKCHART_H
