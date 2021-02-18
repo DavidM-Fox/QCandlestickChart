@@ -9,7 +9,6 @@
 #include <string>
 #include <vector>
 
-
 namespace avapi {
 
 typedef std::pair<std::time_t, std::vector<float>> time_pair;
@@ -30,7 +29,7 @@ extern std::string url_base;
 extern std::string url_symbol_api;
 
 // enum for getTimeSeries()
-enum function { DAILY, WEEKLY, MONTHLY };
+enum function { INTRADAY = 0, DAILY, WEEKLY, MONTHLY };
 
 // Main class of avapi
 class Quote {

@@ -6,13 +6,12 @@
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef MAINWINDOW_UI_H
-#define MAINWINDOW_UI_H
+#ifndef MAINWINDOW_UI1_H
+#define MAINWINDOW_UI1_H
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
@@ -21,11 +20,10 @@
 
 QT_BEGIN_NAMESPACE
 
-class Ui_MainWindow {
+class Ui_MainWindow
+{
 public:
     QWidget *centralwidget;
-    QWidget *gridLayoutWidget;
-    QGridLayout *gridLayout;
     QMenuBar *menubar;
     QMenu *menuTest;
     QMenu *menuEdit;
@@ -40,12 +38,6 @@ public:
         MainWindow->setMinimumSize(QSize(1280, 800));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
-        gridLayoutWidget = new QWidget(centralwidget);
-        gridLayoutWidget->setObjectName(QString::fromUtf8("gridLayoutWidget"));
-        gridLayoutWidget->setGeometry(QRect(0, 0, 1281, 721));
-        gridLayout = new QGridLayout(gridLayoutWidget);
-        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        gridLayout->setContentsMargins(0, 0, 0, 0);
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
@@ -72,22 +64,18 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(
-            QCoreApplication::translate("MainWindow", "Stocker", nullptr));
-        menuTest->setTitle(
-            QCoreApplication::translate("MainWindow", "File", nullptr));
-        menuEdit->setTitle(
-            QCoreApplication::translate("MainWindow", "Edit", nullptr));
-        menuView->setTitle(
-            QCoreApplication::translate("MainWindow", "View", nullptr));
+        MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "Stocker", nullptr));
+        menuTest->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));
+        menuEdit->setTitle(QCoreApplication::translate("MainWindow", "Edit", nullptr));
+        menuView->setTitle(QCoreApplication::translate("MainWindow", "View", nullptr));
     } // retranslateUi
+
 };
 
 namespace Ui {
-class MainWindow : public Ui_MainWindow {
-};
+    class MainWindow: public Ui_MainWindow {};
 } // namespace Ui
 
 QT_END_NAMESPACE
 
-#endif // MAINWINDOW_UI_H
+#endif // MAINWINDOW_UI1_H
