@@ -7,7 +7,7 @@ This widget requires my [avapi](https://github.com/DavidM-Fox/avapi) library to 
 
 # Example Usage
 ## Display daily stock data for a symbol of interest
-The following shows the ```mainwindow.h``` of a simple Qt5 project with a ```QCandlestickChartView``` object set to be the central widget of the application. A demo gif of this simple application is shown as well.
+The following shows the ```mainwindow.h``` of a simple Qt5 project with a ```QCandlestickChartView``` object set to be the central widget of the application. A demo gif is shown as well.
 
 ```C++
 
