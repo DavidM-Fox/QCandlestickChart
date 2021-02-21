@@ -11,16 +11,22 @@ public:
     explicit QCandlestickChartView(QWidget *parent = 0);
     ~QCandlestickChartView();
 
-    void addAvapiSeries(avapi::time_series &series, const QString &title,
+    void addAvapiSeries(avapi::time_series &a_series, const QString &title,
                         const avapi::function &func);
-    void setupChartAxes();
+
+    void setViewDefaults();
+    void setChartDefaults();
+
+    void setChartTitle(const QString &title);
+    void setDefaultChartAxes();
+    void setDefaultChartLegend();
 
 private slots:
     void sltTooltip(bool status, QCandlestickSet *set);
 
 private:
+    static std::vector<QString> m_functions;
     QCandlestickSeries *m_series;
-    std::vector<QString> m_functions;
     QStringList m_categories;
     QLabel *m_tooltip = nullptr;
 };
