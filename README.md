@@ -1,6 +1,6 @@
 # QCandlestickChartView
 
-A custom Qt5 widget written with C++ for displaying historical stock data in a candlestick format.
+A custom Qt5 widget written with C++ for displaying historical stock data in a candlestick format. This widget is designed to work in tandem with my [avapi](https://github.com/DavidM-Fox/avapi) library.
 
 # Prerequisites
 This widget requires my [avapi](https://github.com/DavidM-Fox/avapi) library to function along with its prerequisites as well.
@@ -26,18 +26,15 @@ MainWindow::MainWindow(QWidget *parent)
     avapi::Quote quote("TSLA", avapi::readFirstLineFromFile("../../api.key"));
     avapi::time_series series = quote.getTimeSeries(avapi::DAILY, 20);
 
-    // Construct chart_view and set hints
+    // Creating the chart view
     QCandlestickChartView *chart_view = new QCandlestickChartView();
-    chart_view->setRenderHint(QPainter::Antialiasing);
-    chart_view->setRubberBand(QChartView::HorizontalRubberBand);
+    chart_view->setChartTitle(QString::fromStdString("TSLA"));
 
-    // Add an avapi::time_series object to chart_view
-    chart_view->addAvapiSeries(series, QString::fromStdString("TSLA Last 20 Days"),
+    // Add the avapi::time_series and set defaults
+    chart_view->addAvapiSeries(series, QString::fromStdString("Last 20 Days"),
                                avapi::DAILY);
-    chart_view->chart()->setTitle(QString::fromStdString("TSLA Daily"));
-    chart_view->chart()->setAnimationOptions(QChart::SeriesAnimations);
-
-    // Set chart_view as central widget
+    chart_view->setViewDefaults();
+    chart_view->setChartDefaults();
     this->setCentralWidget(chart_view);
 }
 
